@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_dashboard">
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.gtech.nbacrm.ui.dashboard.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_leads"
+            app:destination="@id/navigation_leads" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_converted"
+            app:destination="@id/navigation_converted" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_follow_up"
+            app:destination="@id/navigation_follow_up" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_tasks"
+            app:destination="@id/navigation_tasks" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_closedLeadsFragment"
+            app:destination="@id/closedLeadsFragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_completedFragment"
+            app:destination="@id/completedFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_follow_up"
+        android:name="com.gtech.nbacrm.ui.followup.FollowUpFragment"
+        android:label="@string/title_followup"
+        tools:layout="@layout/fragment_followup">
+        <action
+            android:id="@+id/action_navigation_follow_up_to_followUpDetailFragment"
+            app:destination="@id/followUpDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_converted"
+        android:name="com.gtech.nbacrm.ui.converted.ConvertedFragment"
+        android:label="@string/title_converted"
+        tools:layout="@layout/fragment_converted">
+        <action
+            android:id="@+id/action_navigation_converted_to_convertedDetailFragment"
+            app:destination="@id/convertedDetailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_tasks"
+        android:name="com.gtech.nbacrm.ui.tasks.AllotedTaskFragment"
+        android:label="@string/title_tasks"
+        tools:layout="@layout/fragment_alloted_task">
+        <action
+            android:id="@+id/action_navigation_tasks_to_createTaskFragment"
+            app:destination="@id/createTaskFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createLead"
+        android:name="com.gtech.nbacrm.ui.leads.CreateLead"
+        android:label="Create Lead"
+        tools:layout="@layout/fragment_create_lead" />
+    <fragment
+        android:id="@+id/updateLeadFragment"
+        android:name="com.gtech.nbacrm.ui.leads.UpdateLeadFragment"
+        android:label="Update Lead"
+        tools:layout="@layout/fragment_update_lead">
+        <argument
+            android:name="parcel"
+            app:argType="com.gtech.nbacrm.ui.leads.ReadLeadModel"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/followUpDetailFragment"
+        android:name="com.gtech.nbacrm.ui.followup.FollowUpDetailFragment"
+        android:label="FollowUp Detail"
+        tools:layout="@layout/fragment_follow_up_detail" />
+    <fragment
+        android:id="@+id/convertedDetailFragment"
+        android:name="com.gtech.nbacrm.ui.converted.ConvertedDetailFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_converted_detail" />
+    <fragment
+        android:id="@+id/createTaskFragment"
+        android:name="com.gtech.nbacrm.ui.tasks.CreateTaskFragment"
+        android:label="CreateTaskFragment"
+        tools:layout="@layout/fragment_create_task" />
+
+    <fragment
+        android:id="@+id/navigation_leads"
+        android:name="com.gtech.nbacrm.ui.leads.LeadFragment"
+        android:label="@string/title_leads"
+        tools:layout="@layout/fragment_leads">
+        <action
+            android:id="@+id/action_navigation_home_to_createLead"
+            app:destination="@id/createLead" />
+        <action
+            android:id="@+id/action_navigation_leads_to_updateLeadFragment"
+            app:destination="@id/updateLeadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/closedLeadsFragment"
+        android:name="com.gtech.nbacrm.ui.closedleads.ClosedLeadsFragment"
+        android:label="Close or Invalid Leads"
+        tools:layout="@layout/fragment_closed_leads" >
+        <action
+            android:id="@+id/action_closedLeadsFragment_to_updateLeadFragment"
+            app:destination="@id/updateLeadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/completedFragment"
+        android:name="com.gtech.nbacrm.ui.completed.CompletedFragment"
+        android:label="Completed Leads"
+        tools:layout="@layout/fragment_completed" />
+
+</navigation>

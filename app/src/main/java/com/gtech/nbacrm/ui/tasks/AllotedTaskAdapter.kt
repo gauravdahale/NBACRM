@@ -1,0 +1,111 @@
+package com.gtech.nbacrm.ui.tasks
+
+import android.app.AlertDialog
+import android.content.Context
+import android.graphics.Color
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.FirebaseDatabase
+import com.gtech.nbacrm.R
+import com.gtech.nbacrm.listeners.ItemClickListener
+
+class AllotedTaskAdapter(val mContext: Context, val mlist: ArrayList<GetAllotedTaskModel>) :
+    RecyclerView.Adapter<AllotedTaskAdapter.AllotedTaskHolder>() {
+  inner  class AllotedTaskHolder(itemview: View) : RecyclerView.ViewHolder(itemview),
+        View.OnClickListener {
+        var itemClickListener: ItemClickListener? = null
+        var taskName = itemview.findViewById<TextView>(R.id.i_alloted_task_name)
+        var taskRemark = itemview.findViewById<TextView>(R.id.i_task_remark)
+        var clientName = itemview.findViewById<TextView>(R.id.i_alloted_task_client_name)
+        var allotedBy = itemview.findViewById<TextView>(R.id.i_task_alloted_by)
+        var allotedTo = itemview.findViewById<TextView>(R.id.i_task_alloted_to)
+        var duedate = itemview.findViewById<TextView>(R.id.i_alloted_task_date)
+        var status = itemview.findViewById<Button>(R.id.i_task_alloted_status)
+
+        init {
+            //     itemview.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            itemClickListener?.onItemClick(layoutPosition)
+        }
+
+        fun setItemOnClickListener(itemClickListener: ItemClickListener) {
+            this.itemClickListener = itemClickListener
+        }
+
+        fun bind(model: GetAllotedTaskModel) {
+            taskName.text = model.taskname
+            clientName.text = model.clientname
+            allotedBy.text = model.allotedby
+        model.taskremark?.let { taskRemark.text = it }
+            duedate.text = model.taskdate
+            allotedTo.text = model.allotedto
+            when (model.status) {
+                "PENDING" -> {
+                    status.text = "PENDING"
+                    status.setBackgroundColor(mContext.resources.getColor(R.color.brown_500))
+
+                }
+                "IN PROGRESS" -> {
+                    status.text = "IN PROGRESS"
+                    status.setBackgroundColor(mContext.resources.getColor(R.color.deep_orange_900))
+                }
+                "COMPLETED" -> {
+                    status.text = "COMPLETED"
+                    status.setBackgroundColor(Color.BLUE)
+                }
+                "FAILED" -> {
+                    status.text = "FAILED"
+                    status.setBackgroundColor(Color.RED)
+                }
+            }
+        status.setOnClickListener {
+            setStatus(itemView,model)
+        }
+        }
+        private fun setStatus(view: View, item:GetAllotedTaskModel) {
+
+            val items = arrayOf("PENDING", "IN PROGRESS", "COMPLETED", "FAILED")
+            val builder = AlertDialog.Builder(itemView.context)
+            with(builder)
+            {
+                setTitle("List of Items")
+                setItems(items) { dialog, which ->
+                    Toast.makeText(itemView.context, items[which] + " is clicked", Toast.LENGTH_SHORT).show()
+                    item.status = items[which]
+                val mhashMap =HashMap<String,Any>()
+                    mhashMap["AllotedTasks/${item.allotedtoid}/${item.key}/status"]=items[which]
+                    mhashMap["AllotedTasks/${item.allotedbyid}/${item.key}/status"]=items[which]
+                  FirebaseDatabase.getInstance().reference.updateChildren(mhashMap)
+                }
+
+                //     setPositiveButton("OK", positiveButtonClick)
+                show()
+            }
+        }
+
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AllotedTaskAdapter.AllotedTaskHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_alloted_tasks, parent, false)
+        return AllotedTaskHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: AllotedTaskAdapter.AllotedTaskHolder, position: Int) {
+        val model = mlist[holder.adapterPosition]
+        holder.bind(model)
+    }
+
+    override fun getItemCount() = mlist.size
+
+    }

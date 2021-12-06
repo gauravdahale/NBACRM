@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NBA CRM</string>
+    <string name="title_leads">Leads</string>
+    <string name="title_followup">Follow Up</string>
+    <string name="title_converted">Converted</string>
+    <string name="title_tasks">Tasks</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="alloted_taks">Alloted Taks</string>
+    <string name="added_by">Added By :</string>
+    <string name="default_notification_channel_id">1112</string>
+    <string name="default_notification_channel_name">1113</string>
+    <string name="title_dashboard">Dashboard</string>
+</resources>

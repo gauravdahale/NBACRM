@@ -1,0 +1,185 @@
+package com.gtech.nbacrm.ui.followup
+
+import android.app.Dialog
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.gtech.nbacrm.ItemDecoration
+import com.gtech.nbacrm.R
+import com.gtech.nbacrm.listeners.ItemClickListener
+import com.gtech.nbacrm.ui.shared.CommentModel
+import com.gtech.nbacrm.ui.shared.CommentsAdapter
+import java.util.*
+import kotlin.collections.ArrayList
+
+class FollowUpAdapter(val mContext: FollowUpFragment, val mList: ArrayList<GetFollowUpModel>) :
+    RecyclerView.Adapter<FollowUpAdapter.ViewHolder>(), Filterable {
+    internal var filter: CustomFilter? = null
+    internal var itemList: ArrayList<GetFollowUpModel> = mList
+    internal var arrayList: ArrayList<GetFollowUpModel> = mList
+
+   inner class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview), View.OnClickListener {
+    var layoutbg = itemview.findViewById<CardView>(R.id.item_followup_layout)
+        val name = itemView.findViewById<TextView>(R.id.i_followup_name)
+        val number = itemView.findViewById<TextView>(R.id.i_followup_number)
+        val city = itemView.findViewById<TextView>(R.id.i_followup_city)
+        val carpetarea = itemView.findViewById<TextView>(R.id.i_followup_carpet_area)
+        val date = itemView.findViewById<TextView>(R.id.i_followup_date)
+        val lastcall = itemView.findViewById<TextView>(R.id.i_followup_last_call_date)
+        val nextcall = itemView.findViewById<TextView>(R.id.i_followup_next_call_date)
+        val lastcommentdate = itemView.findViewById<TextView>(R.id.i_followup_last_comment_date)
+        val lastcomment = itemView.findViewById<TextView>(R.id.i_followup_last_comment)
+        var itemClickListener: ItemClickListener? = null
+        var commentButton = itemView.findViewById<ImageButton>(R.id.followup_comments_icon)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        fun bind(model: GetFollowUpModel) {
+
+            if (model.clientname != null) name.text = model.clientname
+            if (model.contact != null) number.text = model.contact
+            if (model.location != null) city.text = model.location
+            if (model.carpetArea != null) carpetarea.text = model.carpetArea.toString()
+            if (model.timestamp != null) date.text = model.getTimeDate(model.timestamp!!)
+            if (model.lastcommentdate != null) lastcommentdate.text = model.lastcommentdate
+            if (model.lastcomment != null) lastcommentdate.text = model.lastcomment
+            if (model.lastcall != null) lastcall.text = model.lastcalldate
+            if (model.nextcalldate != null) nextcall.text = model.nextcalldate
+            commentButton.setOnClickListener {
+                commentsDialog(model.comments)
+            }
+
+
+        }
+
+            private fun commentsDialog(comments: HashMap<String, CommentModel>?) {
+                val clist =ArrayList<CommentModel>()
+                val dialog = Dialog(mContext.requireContext())
+                dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                dialog.setContentView(R.layout.dialog_comments_recyclerview)
+                val recyclerView = dialog.findViewById<RecyclerView>(R.id.comments_recyclerview)
+                recyclerView.layoutManager = LinearLayoutManager(mContext.requireContext())
+
+                comments?.forEach {
+                    val model = it.value
+                    if(model !=null)clist.add(model)
+                }
+                val commentsAdapter = CommentsAdapter(mContext.requireContext(), clist)
+                recyclerView.addItemDecoration(ItemDecoration(mContext.requireContext()))
+                recyclerView.adapter = commentsAdapter
+                dialog.show()
+            }
+
+        override fun onClick(p0: View?) {
+            itemClickListener?.onItemClick(layoutPosition)
+        }
+
+        fun setItemOnclickListener(itemClickListener: ItemClickListener) {
+            this.itemClickListener = itemClickListener
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_followup, parent, false)
+        return ViewHolder(v)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val model = itemList[holder.adapterPosition]
+        holder.bind(model)
+        when (model.priority) {
+            "Hot" -> {
+                holder.layoutbg.setBackgroundColor(mContext.resources.getColor(R.color.hotlead))
+            }
+            "Warm" -> {
+                holder.layoutbg.setBackgroundColor(mContext.resources.getColor(R.color.warmlead))
+            }
+            "Cold" -> {
+                holder.layoutbg.setBackgroundColor(mContext.resources.getColor(R.color.coldlead))
+            }
+            null -> {
+                holder.layoutbg.setBackgroundColor(mContext.resources.getColor(android.R.color.background_light))
+            }
+            else -> {
+                holder.layoutbg.setBackgroundColor(mContext.resources.getColor(android.R.color.background_light))
+            }
+        }
+        holder.setItemOnclickListener(object : ItemClickListener {
+            override fun onItemClick(i: Int) {
+                val bundle = bundleOf("parcel" to model)
+                mContext.mNavController.navigate(
+                    R.id.action_navigation_follow_up_to_followUpDetailFragment,
+                    bundle
+                )
+            }
+        })
+    }
+
+    override fun getItemCount() = itemList.size
+
+    override fun getFilter(): Filter {
+        if (filter == null) {
+            filter = CustomFilter()
+        }
+        return filter as CustomFilter
+    }
+
+    internal inner class CustomFilter : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            var constraint = constraint
+
+            val results = FilterResults()
+            if (constraint != null && constraint.isNotEmpty()) {
+                constraint = constraint.toString().toUpperCase(Locale.ROOT)
+                val filteredlist = ArrayList<GetFollowUpModel>()
+                for (i in arrayList.indices) {
+                    Log.d("performFiltering","arraylist Item : ${arrayList[i].clientname}")
+                    if (arrayList[i].clientname?.toUpperCase(Locale.ROOT)?.contains(constraint) ==true ||
+                        arrayList[i].carpetArea?.toUpperCase(Locale.ROOT)?.contains(constraint) == true ||
+                        arrayList[i].location?.toUpperCase(Locale.ROOT)?.contains(constraint) == true||
+                        arrayList[i].priority?.toUpperCase(Locale.ROOT)?.contains(constraint) == true||
+                        arrayList[i].contact?.toUpperCase(Locale.ROOT)?.contains(constraint) == true
+                    ) {
+                        val l = arrayList[i]
+                        filteredlist.add(l)
+                        Log.d("performFiltering", "msg: ${l.clientname}")
+                    }
+                }
+
+                results.count = filteredlist.size
+                results.values = filteredlist
+
+            }
+            else {
+                results.count = arrayList.size
+                results.values = arrayList
+                Log.d("performFiltering", "arraylistsize ${arrayList.size}")
+                //Toast.makeText(mContext, "Performing results", Toast.LENGTH_SHORT).show()
+            }
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence, results: FilterResults) {
+//            itemList.clear()
+            itemList = (results.values as? ArrayList<GetFollowUpModel>)!!
+
+            //   itemList.addAll(results.values as ArrayList<GetFollowUpModel>)
+            Log.d("Publishedresults", "publishResults: ${itemList.size} : ")
+            notifyDataSetChanged()
+            Log.d("publishResults", "msg")
+        }
+    }
+
+}

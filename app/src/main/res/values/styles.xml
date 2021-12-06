@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="buttonmini">
+        <item name="android:itemPadding">4dp</item>
+        <item name="paddingStart">1dp</item>
+<item name="android:inset">1dp</item>
+        <item name="paddingEnd">1dp</item>
+   <item name="android:textSize">10dp</item>
+    </style>
+</resources>

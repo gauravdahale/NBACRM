@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "289218776005",
+    "project_id": "nbacrm-742db",
+    "storage_bucket": "nbacrm-742db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289218776005:android:e042b3f5b5405a917cd9ac",
+        "android_client_info": {
+          "package_name": "com.gtech.nbacrm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289218776005-bvbhgkcf8rpp5l30laa8eknrp411nkji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmvMHNH7UgoGV5_jB9OPmAGopetPY4EYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289218776005-bvbhgkcf8rpp5l30laa8eknrp411nkji.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
