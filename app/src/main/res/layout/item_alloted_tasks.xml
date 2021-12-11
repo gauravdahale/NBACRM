@@ -153,7 +153,7 @@
             android:background="?attr/selectableItemBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tint="@color/amber_500"
+            android:tint="@color/grey_500"
             android:layout_marginEnd="9dp"
             android:layout_marginTop="9dp"
             app:layout_constraintEnd_toEndOf="parent"
