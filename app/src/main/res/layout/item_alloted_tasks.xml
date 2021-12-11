@@ -104,6 +104,7 @@
             android:text="Alloted To"
             app:layout_constraintStart_toStartOf="@+id/textView111"
             app:layout_constraintTop_toBottomOf="@+id/textView111" />
+
         <TextView
             android:id="@+id/textView111"
             android:layout_width="wrap_content"
@@ -146,5 +147,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="STATUS" />
+
+        <ImageButton
+            android:id="@+id/delete_task"
+            android:background="?attr/selectableItemBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/amber_500"
+            android:layout_marginEnd="9dp"
+            android:layout_marginTop="9dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_delete_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

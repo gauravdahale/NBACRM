@@ -90,9 +90,7 @@ class ConvertedFragment : Fragment() {
 //                listadapter?.notifyDataSetChanged()
 
 
-                Toast.makeText(
-                    activity!!.applicationContext, "Search Completed...",
-                    Toast.LENGTH_SHORT
+                Toast.makeText(activity!!.applicationContext, "Search Completed...", Toast.LENGTH_SHORT
                 ).show()
                 return true
 
@@ -104,11 +102,7 @@ class ConvertedFragment : Fragment() {
                 Log.d("onQueryTextChange", "msg $p0")
                 mAdapter?.getFilter()?.filter(p0)
                 //listadapter?.notifyDataSetChanged()
-                Toast.makeText(
-                    requireActivity(),
-                    "On Text Change ${mAdapter?.mList?.size}",
-                    Toast.LENGTH_SHORT
-                ).show()
+
                 return true
             }
         })

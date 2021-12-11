@@ -10,6 +10,7 @@ class ConvertedTasksModel constructor() : Serializable {
     var confirm: Boolean = false
     var comment: String? = ""
     var doneby: String? = null
+    var tasktype: String? = null
     var timestamp: MutableMap<String, String>? = null
 constructor(name: String,don:Boolean) : this() {
     this.name = name

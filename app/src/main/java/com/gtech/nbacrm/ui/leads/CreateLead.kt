@@ -148,7 +148,7 @@ class CreateLead : Fragment() {
                             "Submitted Successfully",
                             Toast.LENGTH_SHORT
                         ).show()
-
+mNavController.popBackStack()
                     }
                     .addOnFailureListener {
                         Toast.makeText(

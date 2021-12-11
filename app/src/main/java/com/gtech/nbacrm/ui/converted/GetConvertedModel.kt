@@ -22,6 +22,7 @@ class GetConvertedModel: Serializable {
     var priority: String? = null
     var lastcomment: String? = null
     var date: String? = null
+    var lastcall: String? = null
     var timestamp: Long?=null
     var updatedat: Long?=null
     var comments:HashMap<String, CommentModel>?=null

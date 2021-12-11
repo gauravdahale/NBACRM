@@ -1,4 +1,4 @@
-package com.gtech.nbacrm.ui.converted
+package com.gtech.nbacrm.ui.completed
 
 import android.app.Dialog
 import android.util.Log
@@ -17,14 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gtech.nbacrm.ItemDecoration
 import com.gtech.nbacrm.R
 import com.gtech.nbacrm.listeners.ItemClickListener
+import com.gtech.nbacrm.ui.converted.ConvertedFragment
+import com.gtech.nbacrm.ui.converted.GetConvertedModel
 import com.gtech.nbacrm.ui.shared.CommentModel
 import com.gtech.nbacrm.ui.shared.CommentsAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-class ConvertedAdapter(val mContext: ConvertedFragment, val mList: ArrayList<GetConvertedModel>)
-    : RecyclerView.Adapter<ConvertedAdapter.ViewHolder>(),Filterable {
+class CompletedAdapter(val mContext: CompletedFragment, val mList: ArrayList<GetConvertedModel>)
+    : RecyclerView.Adapter<CompletedAdapter.ViewHolder>(), Filterable {
     internal var filter: CustomFilter? = null
     internal var itemList: ArrayList<GetConvertedModel> = mList
     internal var arrayList: ArrayList<GetConvertedModel> = mList
@@ -77,13 +78,13 @@ class ConvertedAdapter(val mContext: ConvertedFragment, val mList: ArrayList<Get
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConvertedAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompletedAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_leads, parent, false)
 
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: ConvertedAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CompletedAdapter.ViewHolder, position: Int) {
         val model = itemList[holder.adapterPosition]
         holder.bind(model)
         when (model.priority) {
@@ -104,12 +105,12 @@ class ConvertedAdapter(val mContext: ConvertedFragment, val mList: ArrayList<Get
             }
         }
 
-        holder.setItemOnclickListener(object : ItemClickListener {
-            override fun onItemClick(i: Int) {
-                val bundle = bundleOf("parcel" to model)
-                mContext.mNavController.navigate(R.id.action_navigation_converted_to_convertedDetailFragment, bundle)
-            }
-        })
+//        holder.setItemOnclickListener(object : ItemClickListener {
+//            override fun onItemClick(i: Int) {
+//                val bundle = bundleOf("parcel" to model)
+//                mContext.mNavController.navigate(R.id.action_navigation_converted_to_convertedDetailFragment, bundle)
+//            }
+//        })
     }
 
     override fun getItemCount(): Int {

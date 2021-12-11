@@ -2,20 +2,27 @@ package com.gtech.nbacrm.ui.tasks
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.gtech.nbacrm.R
 import com.gtech.nbacrm.listeners.ItemClickListener
+import kotlinx.android.synthetic.main.item_alloted_tasks.view.*
 
 class AllotedTaskAdapter(val mContext: Context, val mlist: ArrayList<GetAllotedTaskModel>) :
     RecyclerView.Adapter<AllotedTaskAdapter.AllotedTaskHolder>() {
+    val currentuser = FirebaseAuth.getInstance().currentUser?.uid.toString()
   inner  class AllotedTaskHolder(itemview: View) : RecyclerView.ViewHolder(itemview),
         View.OnClickListener {
         var itemClickListener: ItemClickListener? = null
@@ -26,6 +33,7 @@ class AllotedTaskAdapter(val mContext: Context, val mlist: ArrayList<GetAllotedT
         var allotedTo = itemview.findViewById<TextView>(R.id.i_task_alloted_to)
         var duedate = itemview.findViewById<TextView>(R.id.i_alloted_task_date)
         var status = itemview.findViewById<Button>(R.id.i_task_alloted_status)
+        var delete = itemview.findViewById<ImageButton>(R.id.delete_task)
 
         init {
             //     itemview.setOnClickListener(this)
@@ -68,8 +76,41 @@ class AllotedTaskAdapter(val mContext: Context, val mlist: ArrayList<GetAllotedT
         status.setOnClickListener {
             setStatus(itemView,model)
         }
+            if(currentuser == model.allotedbyid){
+                itemView.delete_task.visibility =View.VISIBLE
+
+            }
+            else if(currentuser != model.allotedbyid){
+                itemView.delete_task.visibility =View.GONE
+
+            }
+        itemView.delete_task.setOnClickListener {
+            openDeleteDialog(mContext,model)
         }
-        private fun setStatus(view: View, item:GetAllotedTaskModel) {
+        }
+
+      private fun openDeleteDialog(mContext: Context, model: GetAllotedTaskModel) {
+              val builder = androidx.appcompat.app.AlertDialog.Builder(mContext)
+              builder.setCancelable(true)
+              with(builder) {
+                  setMessage("Are you sure you want to delete this task?")
+                  setTitle("Delete Task")
+                  setPositiveButton("Yes", DialogInterface.OnClickListener { _, _ ->
+                      //     Toast.makeText(context, "Yes Clicked", Toast.LENGTH_SHORT).show()
+                      FirebaseDatabase.getInstance().reference.child("AllotedTasks").child(model.allotedtoid.toString()).child(model?.key.toString()).removeValue().addOnCompleteListener {
+                          FirebaseDatabase.getInstance().reference.child("AllotedTasks").child(model.allotedbyid.toString()).child(model?.key.toString()).removeValue().addOnSuccessListener {
+                              Toast.makeText(context, "Task Deleted Successfully", Toast.LENGTH_SHORT).show()
+                          }
+                      }
+                  })
+                  setNegativeButton("No", DialogInterface.OnClickListener { _, _ ->
+                      Toast.makeText(context, "No Clicked", Toast.LENGTH_SHORT).show()
+                  })
+              }
+              builder.show()
+      }
+
+      private fun setStatus(view: View, item:GetAllotedTaskModel) {
 
             val items = arrayOf("PENDING", "IN PROGRESS", "COMPLETED", "FAILED")
             val builder = AlertDialog.Builder(itemView.context)

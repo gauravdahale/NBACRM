@@ -53,8 +53,8 @@ class DashboardFragment : Fragment() {
         mList.add(DashBoardModel("FollowUp", R.drawable.followup))
         mList.add(DashBoardModel("Converted", R.drawable.confirmed))
         mList.add(DashBoardModel("Tasks", R.drawable.tasks))
-        mList.add(DashBoardModel("Cancelled Leads", R.drawable.ic_baseline_cancel_24))
-        mList.add(DashBoardModel("Completed Leads", R.drawable.ic_baseline_check_24))
+        mList.add(DashBoardModel("Not Converted Leads", R.drawable.ic_baseline_cancel_24))
+        mList.add(DashBoardModel("Completed Lead", R.drawable.ic_baseline_check_24))
         mAdapter = DashBoardAdapter(this, mList)
         mRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         mRecyclerView.adapter = mAdapter

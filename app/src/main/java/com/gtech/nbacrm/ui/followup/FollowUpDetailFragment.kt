@@ -114,10 +114,15 @@ class FollowUpDetailFragment : Fragment() {
         }
 
         delete_followup.setOnClickListener {
-            Firebase.database.reference.child("followup").child(getmodel?.key!!).removeValue()
+            Firebase.database.reference.child("closedleads").child(getmodel?.key!!).setValue(getmodel)
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "followup Removed", Toast.LENGTH_SHORT).show()
-                    requireActivity().onBackPressed()
+                    Firebase.database.reference.child("followup").child(getmodel?.key!!)
+                        .removeValue()
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "followup Removed", Toast.LENGTH_SHORT)
+                                .show()
+                            requireActivity().onBackPressed()
+                        }
                 }
         }
         mNextCall.setOnClickListener {

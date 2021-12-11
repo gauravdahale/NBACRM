@@ -134,7 +134,7 @@ var currentuserid =FirebaseAuth.getInstance().currentUser?.uid
                     }
 
                 })}
-            15->{ FirebaseDatabase.getInstance().reference.child("alltickets")
+            5->{ FirebaseDatabase.getInstance().reference.child("completed")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         counter.text =snapshot.childrenCount.toString()

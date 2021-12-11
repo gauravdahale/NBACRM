@@ -2,6 +2,7 @@ package com.gtech.nbacrm.ui.converted
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,8 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -58,14 +61,15 @@ var _binding: FragmentConvertedDetailBinding?=null
         super.onViewCreated(view, savedInstanceState)
         val name = binding.convertedName
         val number = binding.convertedNumber
-        val city =binding.convertedCity
-        val carpetarea =binding.convertedCarpetArea
+        val city = binding.convertedCity
+        val carpetarea = binding.convertedCarpetArea
         val date = binding.convertedDate
         //   model = GetConvertedModel()
         val addressvoew = binding.textView10
         model = arguments?.getSerializable("parcel") as GetConvertedModel?
         val tasks = model?.tasks
-      mQuery = FirebaseDatabase.getInstance().reference.child("converted/${model?.key}/tasks").orderByChild("confirm")
+        mQuery = FirebaseDatabase.getInstance().reference.child("converted/${model?.key}/tasks")
+            .orderByChild("confirm")
         Log.d("TASKS", "Task ${tasks?.size}")
         Log.d("Tasks List", "Tasks : ${model?.tasks?.size}")
         if (model?.clientname != null) name.text = model?.clientname
@@ -74,7 +78,7 @@ var _binding: FragmentConvertedDetailBinding?=null
         if (model?.carpetArea != null) carpetarea.text = model?.carpetArea.toString()
         if (model?.address != null) converted_last_call_address.text = model?.address.toString()
         if (model?.timestamp != null) date.text = model?.getTimeDate(model?.timestamp!!)
-        setvalue(model?.type,converted_detail_type)
+        setvalue(model?.type, converted_detail_type)
         mRecyclerView = view.findViewById(R.id.tasks_recyclerview)
 //        mAdapter = ConvertedTasksAdapter(model?.tasks!!, requireContext(), model!!)
         mAdapter = ConvertedTasksAdapter(mList, requireContext(), model!!)
@@ -85,15 +89,40 @@ var _binding: FragmentConvertedDetailBinding?=null
         binding.convertedDetailType.setOnClickListener { changetypedialog(model!!) }
         getTasks()
         addressvoew.setOnClickListener { addComment(view, requireContext()) }
-    val tasktype = arrayListOf<String>("ALL","TYPE1","TYPE2","TYPE3")
-    val tasktypeadapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_dropdown_item,tasktype)
+        val tasktype = arrayListOf<String>("ALL", "Layout", "Inital Listings", "Product Listings","Final")
+        val tasktypeadapter = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            tasktype
+        )
 
         tasktypefilter.setOnItemClickListener { adapterView, view, i, l ->
-if(adapterView.getItemAtPosition(i).toString()!="ALL")            mAdapter.getFilter().filter(adapterView.getItemAtPosition(i).toString())
-else mAdapter.getFilter().filter("")
+            if (adapterView.getItemAtPosition(i).toString() != "ALL") mAdapter.getFilter()
+                .filter(adapterView.getItemAtPosition(i).toString())
+            else mAdapter.getFilter().filter("")
         }
         tasktypefilter.setAdapter(tasktypeadapter)
 
+
+        binding.closeLead.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setCancelable(true)
+            with(builder) {
+                setMessage("Are you sure you want to close this lead.")
+                setTitle("Close this lead?")
+                setPositiveButton("Yes", DialogInterface.OnClickListener { _, _ ->
+               //     Toast.makeText(context, "Yes Clicked", Toast.LENGTH_SHORT).show()
+FirebaseDatabase.getInstance().reference.child("completed").child(model?.key.toString()).setValue(model).addOnCompleteListener {
+    FirebaseDatabase.getInstance().reference.child("converted").child(model?.key.toString()).removeValue().addOnSuccessListener {
+Navigation.findNavController(view).popBackStack()
+   }
+}
+                })
+                setNegativeButton("No", DialogInterface.OnClickListener { _, _ ->
+                })
+            }
+builder.show()
+        }
     }
 
     private fun changetypedialog(model: GetConvertedModel) {
