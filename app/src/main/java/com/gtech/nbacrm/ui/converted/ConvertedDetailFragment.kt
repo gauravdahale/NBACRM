@@ -89,7 +89,7 @@ var _binding: FragmentConvertedDetailBinding?=null
         binding.convertedDetailType.setOnClickListener { changetypedialog(model!!) }
         getTasks()
         addressvoew.setOnClickListener { addComment(view, requireContext()) }
-        val tasktype = arrayListOf<String>("ALL", "Layout", "Initial Listings", "Product Listings","Final")
+        val tasktype = arrayListOf<String>("ALL", "Layout", "Initial Listings", "Listings","Final")
         val tasktypeadapter = ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,

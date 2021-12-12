@@ -12,4 +12,5 @@
     <string name="default_notification_channel_name">1113</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="close_lead_button">Close Lead Button</string>
+    <string name="v5_0">v5.0</string>
 </resources>

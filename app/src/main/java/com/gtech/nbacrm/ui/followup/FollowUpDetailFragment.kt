@@ -309,7 +309,17 @@ mNavController.popBackStack()                    }
 
         }
 //FirebaseDatabase.getInstance().reference.child("CustomHeaders").setValue(createTasks())
+        followup_not_converted.setOnClickListener {
+            FirebaseDatabase.getInstance().reference.child("closedleads").child(getmodel?.key!!).setValue(getmodel).addOnCompleteListener { it ->
+                if(it.isSuccessful)FirebaseDatabase.getInstance().reference.child("followup").child(getmodel?.key!!).removeValue().addOnCompleteListener {
+                    if(it.isSuccessful) Toast.makeText(requireContext(), "Lead Moved to Not Converted", Toast.LENGTH_SHORT).show()
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+
     }
+
 
 
     private fun setValues(model: GetFollowUpModel?) {

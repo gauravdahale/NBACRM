@@ -26,6 +26,7 @@ import com.gtech.nbacrm.ui.shared.CommentModel
 import kotlinx.android.synthetic.main.fragment_create_lead.delete_lead
 import kotlinx.android.synthetic.main.fragment_create_lead.submit_lead
 import kotlinx.android.synthetic.main.fragment_update_lead.*
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -163,12 +164,13 @@ class UpdateLeadFragment : Fragment() {
                 .addOnSuccessListener {
                     Firebase.database.reference.child("leads").child(getmodel?.key!!).removeValue()
                         .addOnSuccessListener {
-                            Snackbar.make(
-                                leadupdatelayout,
-                                "Lead moved to followup",
-                                Snackbar.LENGTH_LONG
-                            )
-                                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
+                         try {
+                             Snackbar.make(leadupdatelayout, "Lead moved to followup", Snackbar.LENGTH_LONG)
+                                 .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
+                         }
+                         catch (e:Exception){
+                             Log.e("Update Lead Fragment", "onViewCreated: ${e.message}", )
+                         }
                             requireActivity().onBackPressed()
                         }
                 }
@@ -186,7 +188,7 @@ class UpdateLeadFragment : Fragment() {
 binding.leadClose.setOnClickListener {
     FirebaseDatabase.getInstance().reference.child("closedleads").child(getmodel?.key!!).setValue(getmodel).addOnCompleteListener { it ->
         if(it.isSuccessful)FirebaseDatabase.getInstance().reference.child("leads").child(getmodel?.key!!).removeValue().addOnCompleteListener {
-            if(it.isSuccessful) Toast.makeText(requireContext(), "Lead Moved to Closed Leads", Toast.LENGTH_SHORT).show()
+            if(it.isSuccessful) Toast.makeText(requireContext(), "Lead Moved to Not Converted", Toast.LENGTH_SHORT).show()
             requireActivity().onBackPressed()
         }
     }
